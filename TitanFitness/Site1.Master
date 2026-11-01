@@ -1,0 +1,150 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="Titan_Fitness.Site1" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN FITNESS | Premium Gym & Fitness Center</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server" enctype="multipart/form-data">
+
+        <!-- HEADER / NAVBAR -->
+        <header class="navbar" id="navbar">
+            <div class="nav-container">
+                <a href="Home.aspx" class="logo">
+                    <span class="logo-icon"><i class="fa-solid fa-dumbbell"></i></span>
+                    <span class="logo-text">TITAN<span class="highlight">FITNESS</span></span>
+                </a>
+
+                <% if (Session["AdminEmail"] != null)
+                    { %>
+
+                <nav class="nav-menu" id="navMenu">
+                    <ul class="nav-list">
+                        <li><a href="admin_dashboard.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("admin_dashboard.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Dashboard</a></li>
+                        <li><a href="AdminProfile.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("AdminProfile.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Admin Profile</a></li>
+                        <li><a href="admin_members.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("admin_members.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Members</a></li>
+                        <li><a href="AdminProfile.aspx?tab=tab-trainers" class="nav-link">Trainers</a></li>
+                        <li><a href="admin_payments.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("admin_payments.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Payments</a></li>
+                        <li><a href="admin_queries.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("admin_queries.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Queries</a></li>
+                    </ul>
+                </nav>
+
+                <div class="nav-actions" id="navActions">
+                    <div class="user-badge" style="border-color: #FF4D4D; color: #FF4D4D;">
+                        <a href="AdminProfile.aspx" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-user-shield"></i> Admin
+                        </a>
+                        <asp:LinkButton ID="btnAdminLogout" runat="server" CssClass="btn btn-sm btn-dark" OnClick="btnAdminLogout_Click" ToolTip="Log out">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </asp:LinkButton>
+                    </div>
+                </div>
+                <% }
+                    else
+                    { %>
+
+                <nav class="nav-menu" id="navMenu">
+                    <ul class="nav-list">
+                        <li><a href="Home.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("Home.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Home</a></li>
+                        <li><a href="About.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("About.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">About</a></li>
+                        <li><a href="Services.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("Services.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Services</a></li>
+                        <li><a href="Plans.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("Plans.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Plans</a></li>
+                        <li><a href="Trainers.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("Trainers.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Trainers</a></li>
+                        <li><a href="Gallery.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("Gallery.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Gallery</a></li>
+                        <li><a href="Contact.aspx" class="nav-link <%: Page.AppRelativeVirtualPath.EndsWith("Contact.aspx", StringComparison.OrdinalIgnoreCase) ? "active" : "" %>">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <div class="nav-actions" id="navActions">
+                    <% if (Session["UserEmail"] == null)
+                        { %>
+                    <a href="Login.aspx" class="btn btn-outline"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                    <a href="Register.aspx" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Join Now</a>
+                    <% }
+                        else
+                        { %>
+                    <a href="UserProfile.aspx" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">
+                        <i class="fa-solid fa-user-circle"></i> Profile
+                    </a>
+                    <div class="user-badge">
+                        <a href="UserProfile.aspx" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-user-circle"></i> <%: Session["UserName"] != null ? Session["UserName"].ToString() : "Member" %>
+                        </a>
+                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-sm btn-dark" OnClick="btnLogout_Click" ToolTip="Log out">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </asp:LinkButton>
+                    </div>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+        </header>
+
+        <main>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="Home.aspx" class="logo">
+                        <span class="logo-icon"><i class="fa-solid fa-dumbbell"></i></span>
+                        <span class="logo-text">TITAN<span class="highlight">FITNESS</span></span>
+                    </a>
+                    <p>The ultimate fitness destination built for warriors, athletes, and everyday achievers. Transform your body with our expert coaches and world-class equipment.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="Home.aspx">Home</a></li>
+                        <li><a href="About.aspx">About Us</a></li>
+                        <li><a href="Services.aspx">Our Services</a></li>
+                        <li><a href="Plans.aspx">Membership Plans</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Support & Auth</h4>
+                    <ul class="footer-links">
+                        <li><a href="Contact.aspx">Contact Us</a></li>
+                        <li><a href="Register.aspx">Register Account</a></li>
+                        <li><a href="Login.aspx">Member Login</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Hours & Location</h4>
+                    <p><i class="fa-solid fa-location-dot"></i> 742 Olympic Blvd, NY</p>
+                    <p><i class="fa-solid fa-phone"></i> +1 (555) TITAN-FIT</p>
+                    <p><i class="fa-solid fa-clock"></i> Mon-Fri: 5am - 11pm</p>
+                    <p><i class="fa-solid fa-clock"></i> Sat-Sun: 6am - 9pm</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom text-center">
+                <p>&copy; 2026 TITAN FITNESS Gym Management System. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+    </form>
+</body>
+</html>
